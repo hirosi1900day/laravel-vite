@@ -1,0 +1,36 @@
+version: '3'
+services:
+  nginx2:
+    container_name: "nginx2"
+    build:
+      context: ./docker/nginx
+    depends_on:
+      - app
+    ports:
+      - 81:80
+    volumes:
+      - ./:/src
+
+  app:
+    container_name: "app"
+    build:
+      context: ./docker/php
+    depends_on:
+      - mysql
+    ports:
+      - 80:5173
+    volumes:
+      - ./:/src
+      - ./docker/php/php.ini:/usr/local/etc/php/php.ini
+
+  mysql:
+    image: mysql:8.0.28
+    command: --max_allowed_packet=32505856
+    container_name: "mysql"
+    volumes:
+      - ./docker/mysql:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=l9vitedev
+    ports:
+      - 3306:3306
