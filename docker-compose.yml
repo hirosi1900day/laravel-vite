@@ -7,7 +7,7 @@ services:
     depends_on:
       - app
     ports:
-      - 81:80
+      - 80:80
     volumes:
       - ./:/src
 
@@ -18,7 +18,7 @@ services:
     depends_on:
       - mysql
     ports:
-      - 80:5173
+      - 5173:5173
     volumes:
       - ./:/src
       - ./docker/php/php.ini:/usr/local/etc/php/php.ini
@@ -30,7 +30,12 @@ services:
     volumes:
       - ./docker/mysql:/var/lib/mysql
     environment:
-      - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_DATABASE=l9vitedev
+      - MYSQL_ALLOW_EMPTY_PASSWORD='yes'
     ports:
       - 3306:3306
+
+  redis:
+    image: redis:alpine
+    container_name: "redis"
+    ports:
+      - 16379:6379
